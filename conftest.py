@@ -1,4 +1,6 @@
 import os
+import warnings
+
 import pytest
 from device import Device
 
@@ -11,5 +13,7 @@ def device():
     yield dev
     try:
         dev.command("RESET")
+    except (TimeoutError, AssertionError) as exc:
+        warnings.warn(f"Device RESET during teardown failed: {exc}", RuntimeWarning)
     finally:
         dev.close()
