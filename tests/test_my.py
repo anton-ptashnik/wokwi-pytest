@@ -1,4 +1,5 @@
 import pytest
+from assertions import assert_error
 
 
 def test_status_values(device):
@@ -19,19 +20,16 @@ def test_status_values(device):
 @pytest.mark.parametrize("value", ["INVALID_COMMAND", "SETPWM 55", "SET LED ON OFF"])
 def test_invalid_command(device, value):
     r = device.command(value)
-    assert r["status"] == "ERROR"
-    assert r["code"] == "UNKNOWN_COMMAND"
+    assert_error(r, "UNKNOWN_COMMAND")
 
 
 @pytest.mark.parametrize("value", ["SET LED NO", "SET LED 1", "SET LED YES", "SET LED "])
 def test_invalid_led_value(device, value):
     r = device.command(value)
-    assert r["status"] == "ERROR"
-    assert r["code"] == "INVALID_VALUE"
+    assert_error(r, "INVALID_VALUE")
 
 
 @pytest.mark.parametrize("value", ["SET PWM high", "SET PWM low", "SET PWM 10a", "SET PWM a10", "SET PWM "])
 def test_invalid_pwm_value(device, value):
     r = device.command(value)
-    assert r["status"] == "ERROR"
-    assert r["code"] == "INVALID_VALUE"
+    assert_error(r, "INVALID_VALUE")
