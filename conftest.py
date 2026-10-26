@@ -3,13 +3,28 @@ import warnings
 
 import pytest
 from device import Device
+from emulator import EMULATOR_PORT, running_emulator
+
+
+def pytest_addoption(parser):
+    parser.addoption("--external-device", action="store_true",
+                     help="Use DEVICE_PORT without starting or stopping Wokwi")
+
+
+@pytest.fixture(scope="session")
+def device_port(request):
+    port = os.getenv("DEVICE_PORT", EMULATOR_PORT)
+    if request.config.getoption("--external-device") or port not in {
+        EMULATOR_PORT, "rfc2217://127.0.0.1:4000"
+    }:
+        yield port
+        return
+    with running_emulator() as emulator_port:
+        yield emulator_port
 
 @pytest.fixture
-def device():
-    port = os.getenv("DEVICE_PORT")
-    if not port:
-        pytest.skip("Set DEVICE_PORT, e.g. COM5, /dev/ttyUSB0 or rfc2217://localhost:4000 (Wokwi)")
-    dev = Device(port, timeout=2.0)
+def device(device_port):
+    dev = Device(device_port, timeout=2.0)
     yield dev
     try:
         dev.command("RESET")

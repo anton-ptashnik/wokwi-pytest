@@ -3,7 +3,7 @@ import time
 import serial
 
 class Device:
-    def __init__(self, port, baudrate=9600, timeout=1.0):
+    def __init__(self, port, baudrate=115200, timeout=1.0):
         # serial_for_url accepts both a COM port (COM5, /dev/ttyUSB0)
         # and a Wokwi RFC2217 URL (rfc2217://localhost:4000)
         self.ser = serial.serial_for_url(port, baudrate=baudrate, timeout=timeout)
