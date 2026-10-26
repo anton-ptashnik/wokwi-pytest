@@ -25,7 +25,7 @@ connection. The emulator is shared across the session.
 
 ## Setup
 
-Use Python 3.10 or later. From the repository root:
+Use Python 3.12 (the tested version). From the repository root:
 
 ```sh
 python -m venv .venv
