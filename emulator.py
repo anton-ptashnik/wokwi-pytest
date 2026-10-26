@@ -31,7 +31,7 @@ def running_emulator(startup_timeout=60):
         raise RuntimeError("Set WOKWI_CLI_TOKEN to your Wokwi CLI API token.")
     pio = shutil.which("pio")
     if not pio:
-        raise RuntimeError("Install PlatformIO (pip install platformio) to build the firmware.")
+        raise RuntimeError("Install dependencies (python -m pip install -r requirements.txt) to build the firmware.")
     with socket.socket() as probe:
         if probe.connect_ex(("localhost", 4000)) == 0:
             raise RuntimeError("Port 4000 is already in use. Stop the existing emulator or use --external-device.")
